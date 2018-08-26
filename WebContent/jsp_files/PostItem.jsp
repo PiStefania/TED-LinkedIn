@@ -113,18 +113,19 @@
 			<div class="button_actions">
 				<form role="Form" method="POST" action="${pageContext.request.contextPath}/PostAction" accept-charset="UTF-8" enctype="multipart/form-data">
 				    <button id="giveLike" type="button" class="btn btn-default"  type="submit"><i class="glyphicon glyphicon-thumbs-up"></i> Like</button>             
-				    <button id="makeComment" type="button" class="btn btn-default"  type="submit" onclick="enableCommentsSection()"><i class="glyphicon glyphicon-comment"></i> Comment</button>
+				    <button id="makeComment" type="button" class="btn btn-default"  type="submit" onclick="enableCommentsSection(${post.id})"><i class="glyphicon glyphicon-comment"></i> Comment</button>
 				</form>
 			</div>
 			
 		
 			<div class="commentsBox" id="commentsBox" style="display:none;">
 				<div class="commenterImage">
-	            	<img src="http://placekitten.com/40/40" />
+	            	<img src="<%=session.getAttribute("image")%>" />
 	            </div>
 		        <form class="form-inline" role="form" method="POST" id="commentForm" action="${pageContext.request.contextPath}/CommentCreation" accept-charset="UTF-8">
 		            <div class="form-group">
 		                <input class="form-control" id="comment" name="comment" type="text" placeholder="Add a comment..." />
+		                 <input type="hidden" name="post_id" value="${post.id}" />
 		            </div>
 		        </form>
         		<ul class="commentList">            		
@@ -134,7 +135,6 @@
 		                </div>
 		                <div class="commentText">
 		                    <p class="">Hello this is a test comment.</p> <span class="date sub-text">on March 5th, 2014</span>
-		
 		                </div>
 		            </li>
 		            <li>
@@ -143,7 +143,6 @@
 		                </div>
 		                <div class="commentText">
 		                    <p class="">Hello this is a test comment and this comment is particularly very long and it goes on and on and on.</p> <span class="date sub-text">on March 5th, 2014</span>
-		
 		                </div>
 		            </li>
 		            <li>
@@ -152,7 +151,6 @@
 		                </div>
 		                <div class="commentText">
 		                    <p class="">Hello this is a test comment.</p> <span class="date sub-text">on March 5th, 2014</span>
-		
 		                </div>
 		            </li>
         		</ul>

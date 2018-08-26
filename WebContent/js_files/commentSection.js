@@ -14,7 +14,7 @@ function submitForm(){
 	});
 }
 
-function enableCommentsSection(){
-	var commentsSection = document.getElementById("commentsBox");
+function enableCommentsSection(child){
+	var commentsSection = document.getElementsByClassName("commentsBox")[child-1];
 	commentsSection.style.display = "block";
 }
