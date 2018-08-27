@@ -8,7 +8,7 @@ public interface CommentDAO {
 
     public List<Comment> list();
 
-	public int create(Comment comment, int userId, int postId);
+	public int create(Comment comment, Long userId, Long postId);
     
     public int count();
     

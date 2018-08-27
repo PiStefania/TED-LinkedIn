@@ -72,10 +72,6 @@ public class LoginUser extends HttpServlet {
 				displayPage = getServletContext().getRequestDispatcher("/jsp_files/admin_page.jsp");
 			}else {
 				displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
-				PostDAO postDAO = new PostDAOImpl(true);
-				List<Post> userPosts = postDAO.findPosts(Long.valueOf(loggedInUser.getId()));
-				//get right posts
-				request.setAttribute("posts",userPosts);
 			} 
 			displayPage.forward(request, response);
 		}

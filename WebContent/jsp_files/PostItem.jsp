@@ -111,14 +111,20 @@
 				<p class="post_text">no comments</p>
 			</div>
 			<div class="button_actions">
-				<form role="Form" method="POST" action="${pageContext.request.contextPath}/PostAction" accept-charset="UTF-8" enctype="multipart/form-data">
-				    <button id="giveLike" type="button" class="btn btn-default"  type="submit"><i class="glyphicon glyphicon-thumbs-up"></i> Like</button>             
-				    <button id="makeComment" type="button" class="btn btn-default"  type="submit" onclick="enableCommentsSection(${post.id})"><i class="glyphicon glyphicon-comment"></i> Comment</button>
+				<form role="Form" method="POST" action="${pageContext.request.contextPath}/PostHandle?action=increaseLikes" accept-charset="UTF-8">
+				    <button id="giveLike" class="btn btn-default"  type="submit"><i class="glyphicon glyphicon-thumbs-up"></i> Like</button>   
+				    <input type="hidden" name="post_id" value="${post.id}" />         
+					<button id="makeComment" type="button" class="btn btn-default" onclick="enableCommentsSection(${post.id})"><i class="glyphicon glyphicon-comment"></i> Comment</button>
 				</form>
 			</div>
 			
 		
 			<div class="commentsBox" id="commentsBox" style="display:none;">
+				<% if ( request.getAttribute( "commentError" ) != null ) { %>
+					<div class="alert alert-danger">
+						<strong>Error!</strong> <%=request.getAttribute( "commentError" )%>
+					</div>
+				<% } %>
 				<div class="commenterImage">
 	            	<img src="<%=session.getAttribute("image")%>" />
 	            </div>

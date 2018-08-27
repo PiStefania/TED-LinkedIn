@@ -23,18 +23,21 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 
 import JavaFiles.AESCrypt;
+import database.dao.comment.CommentDAO;
+import database.dao.comment.CommentDAOImpl;
 import database.dao.post.PostDAO;
 import database.dao.post.PostDAOImpl;
 import database.dao.user.UserDAO;
 import database.dao.user.UserDAOImpl;
+import database.entities.Comment;
 import database.entities.Post;
 import database.entities.User;
 
 /**
  * Servlet implementation class PostCreation
  */
-@WebServlet("/PostCreation")
-public class PostCreation extends HttpServlet {
+@WebServlet("/PostHandle")
+public class PostHandle extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private ServletFileUpload uploader = null;
@@ -47,19 +50,72 @@ public class PostCreation extends HttpServlet {
         uploader.setHeaderEncoding("UTF-8");
     }
        
-    public PostCreation() {
+    public PostHandle() {
         super();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getParameter("action")!=null) {
+			if(request.getParameter("action").equals("getPosts")) {
+				PostDAO dao = new PostDAOImpl(true);
+				HttpSession session = request.getSession();
+				List<Post> userPosts = dao.findPosts(Long.valueOf((String) session.getAttribute("id")));
+				//get right posts
+				request.setAttribute("posts",userPosts);
+				request.setAttribute("redirectPosts", "StopLoopPosts");
+				//get & set comments & edit post
+				CommentDAO commentsDao = new CommentDAOImpl(true);
+				for(Post post: userPosts) {
+					//set comments
+					List<Comment> comments = commentsDao.findComments((long)post.getId());
+					//set Date interval in specific format for comments
+					post.setComments(comments);
+					//set Date interval in specific format
+					//decrypt path and set lists of images,videos,audios
+				}				 
+				//display page
+				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
+				displayPage.forward(request, response);
+				return;
+			}
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
-		
+		PostDAO dao = new PostDAOImpl(true);
+		if(request.getParameter("action")!=null) {
+			if(request.getParameter("action").equals("getPosts")) {
+				HttpSession session = request.getSession();
+				List<Post> userPosts = dao.findPosts(Long.valueOf((String) session.getAttribute("id")));
+				//get right posts
+				request.setAttribute("posts",userPosts);
+				request.setAttribute("redirectPosts", "StopLoopPosts");
+				//get & set comments & edit post
+				CommentDAO commentsDao = new CommentDAOImpl(true);
+				for(Post post: userPosts) {
+					//set comments
+					List<Comment> comments = commentsDao.findComments((long)post.getId());
+					//set Date interval in specific format for comments
+					post.setComments(comments);
+					//set Date interval in specific format
+					//decrypt path and set lists of images,videos,audios
+				}				
+				//display page
+				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
+				displayPage.forward(request, response);
+				return;
+			}else if(request.getParameter("action").equals("increaseLikes")) {
+				//update likes
+				dao.increaseLikes(Long.valueOf(request.getParameter("post_id")));
+				//display page
+				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
+				displayPage.forward(request, response);
+				return;
+			}
+		}
 		//display page
 		RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
 		
-		PostDAO dao = new PostDAOImpl(true);
 		ArrayList<FileItem> files = new ArrayList<FileItem>();
 		
 		Hashtable<String, String> fields = new Hashtable<String, String>();
@@ -187,10 +243,7 @@ public class PostCreation extends HttpServlet {
 			
 			Post newPost = new Post(text,dNow,pathFiles,hasAudio, hasImages, hasVideo, 0, user);
 			dao.create(newPost);
-			HttpSession session = request.getSession();
-			List<Post> userPosts = dao.findPosts(Long.valueOf((String) session.getAttribute("id")));
-			//get right posts
-			request.setAttribute("posts",userPosts);
+		
 			//go home
 			displayPage.forward(request, response);
 		}

@@ -17,8 +17,8 @@ public class PostDAOImpl implements PostDAO
 	private static final String SQL_LIST = "SELECT id, text, date_posted, path_files, hasAudio, hasImages, hasVideos, likes, user_id FROM Post";
 	private static final String SQL_INSERT = "INSERT INTO Post (text, date_posted, path_files, hasAudio, hasImages, hasVideos, likes, user_id) VALUES  (?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String SQL_COUNT = "SELECT COUNT(*) FROM Post";
-	private static final String SQL_FIND_POSTS = "SELECT id,text, date_posted, path_files, hasAudio, hasImages, hasVideos, likes FROM Post WHERE user_id = ? ORDER BY date_posted";
-
+	private static final String SQL_FIND_POSTS = "SELECT id,text, date_posted, path_files, hasAudio, hasImages, hasVideos, likes FROM Post WHERE user_id = ? ORDER BY date_posted DESC";
+	private static final String SQL_UPDATE_LIKES = "UPDATE Post SET likes = likes + 1 WHERE id = ?";
     
     private ConnectionFactory factory;
     
@@ -122,6 +122,24 @@ public class PostDAOImpl implements PostDAO
 
         return posts;
 	}
+	
+	@Override
+	public void increaseLikes(Long id) {
+        try (
+            Connection connection = factory.getConnection();
+        		PreparedStatement statement = DAOUtil.prepareStatement(connection, SQL_UPDATE_LIKES, false, id);
+        ) {
+        	int rowsChanged = statement.executeUpdate();
+        	if(rowsChanged==0) {
+        		System.err.println("Update did not happen.");
+        	}
+        } 
+        catch (SQLException e) {
+        	System.err.println(e.getMessage());
+        }
+	}
+	
+	
 	
 	private static Post map(ResultSet resultSet) throws SQLException {
         Post post = new Post();

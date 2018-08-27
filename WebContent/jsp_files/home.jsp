@@ -15,6 +15,10 @@
 		
 	</head>
 	<body>
+		<% if ( request.getAttribute( "redirectPosts" ) == null ) { %>
+			<jsp:forward page="/PostHandle?action=getPosts" />
+		<% } %>
+	
 		<jsp:include page="Header.jsp" /> 
 		
 		<div class="main">
@@ -42,7 +46,7 @@
 				</div>
 				<div class="loader" id="loader"></div>
 				<div class="form_post" id="form_post">
-					<form role="Form" method="POST" action="${pageContext.request.contextPath}/PostCreation" accept-charset="UTF-8" enctype="multipart/form-data" onsubmit="return enableLoading()">
+					<form role="Form" method="POST" action="${pageContext.request.contextPath}/PostHandle" accept-charset="UTF-8" enctype="multipart/form-data" onsubmit="return enableLoading()">
 						<% if ( request.getAttribute( "postError" ) != null ) { %>
 							<div class="alert alert-danger">
 								<%=request.getAttribute( "postError" )%>
