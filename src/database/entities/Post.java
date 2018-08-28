@@ -151,5 +151,33 @@ public class Post implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
+	//local fields for populate
+	@Transient
+	private int noComments;
+
+	public int getNoComments() {
+		return noComments;
+	}
+
+	public void setNoComments(int noComments) {
+		this.noComments = noComments;
+	}
+	
+	@Transient
+	private String dateInterval;
+
+	public String getDateInterval() {
+		return dateInterval;
+	}
+
+	public void setDateInterval(String dateInterval) {
+		this.dateInterval = dateInterval;
+	}
+	
+	
+	
+	
+	
 
 }

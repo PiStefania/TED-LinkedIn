@@ -9,6 +9,8 @@ import java.util.List;
 
 import database.dao.ConnectionFactory;
 import database.dao.DAOUtil;
+import database.dao.user.UserDAO;
+import database.dao.user.UserDAOImpl;
 import database.entities.Comment;
 
 public class CommentDAOImpl implements CommentDAO 
@@ -18,7 +20,7 @@ public class CommentDAOImpl implements CommentDAO
 	private static final String SQL_INSERT = "INSERT INTO Comment (date_posted, text, post_id, user_id) VALUES (?, ?, ?, ?)";
 	private static final String SQL_COUNT = "SELECT COUNT(*) FROM Comment";
 	private static final String SQL_FIND_COMMENTS = "SELECT comment_id, text, date_posted, post_id, user_id FROM Comment WHERE post_id = ? ORDER BY date_posted ASC";
-
+	
     
     private ConnectionFactory factory;
     
@@ -134,6 +136,8 @@ public class CommentDAOImpl implements CommentDAO
         comment.setCommentId(resultSet.getInt("comment_id"));
         comment.setDatePosted(new java.util.Date(resultSet.getTimestamp("date_posted").getTime()));
         comment.setText(resultSet.getString("text"));
+        UserDAO userDao = new UserDAOImpl(true);
+        comment.setUser(userDao.find(resultSet.getInt("user_id")));
 	    return comment;
 	}
 }

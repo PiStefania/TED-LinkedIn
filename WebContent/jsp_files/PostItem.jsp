@@ -16,7 +16,7 @@
 			<div class="info_post" id="info_post">
 				<img class="image_circle_view" alt="thumbnail" src="<%=session.getAttribute("image")%>">
 				<h5><b><%=session.getAttribute("name")%> <%=session.getAttribute("surname")%></b></h5>
-				<p style="color:#999999;">${requestScope.post.datePosted}</p>
+				<p style="color:#999999;">${requestScope.post.dateInterval}</p>
 			</div>
 			<!-- text post -->
 			<c:if test="${post.text!='null'}">
@@ -107,8 +107,8 @@
 				</audio>
 			</c:if>
 			<div class="metrics">
-				<p class="post_text">no likes &middot;</p>
-				<p class="post_text">no comments</p>
+				<p class="post_text">${post.likes} Likes &middot;</p>
+				<p class="post_text">${post.noComments} Comments</p>
 			</div>
 			<div class="button_actions">
 				<form role="Form" method="POST" action="${pageContext.request.contextPath}/PostHandle?action=increaseLikes" accept-charset="UTF-8">
@@ -134,31 +134,17 @@
 		                 <input type="hidden" name="post_id" value="${post.id}" />
 		            </div>
 		        </form>
-        		<ul class="commentList">            		
-        			<li>
-		                <div class="commenterImage">
-		                  <img src="http://placekitten.com/50/50" />
-		                </div>
-		                <div class="commentText">
-		                    <p class="">Hello this is a test comment.</p> <span class="date sub-text">on March 5th, 2014</span>
-		                </div>
-		            </li>
-		            <li>
-		                <div class="commenterImage">
-		                  <img src="http://placekitten.com/45/45" />
-		                </div>
-		                <div class="commentText">
-		                    <p class="">Hello this is a test comment and this comment is particularly very long and it goes on and on and on.</p> <span class="date sub-text">on March 5th, 2014</span>
-		                </div>
-		            </li>
-		            <li>
-		                <div class="commenterImage">
-		                  <img src="http://placekitten.com/40/40" />
-		                </div>
-		                <div class="commentText">
-		                    <p class="">Hello this is a test comment.</p> <span class="date sub-text">on March 5th, 2014</span>
-		                </div>
-		            </li>
+		        <ul class="commentList">
+			        <c:forEach items="${post.comments}" var="comment"> 
+						<li>
+			                <div class="commenterImage">
+			                  <img src="${comment.user.photoURL}" />
+			                </div>
+			                <div class="commentText">
+			                    <p class="">${comment.text}</p> <span class="date sub-text">${comment.dateInterval}</span>
+			                </div>
+		            	</li>
+					</c:forEach>
         		</ul>
 
     		</div>

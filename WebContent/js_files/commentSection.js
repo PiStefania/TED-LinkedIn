@@ -15,6 +15,7 @@ function submitForm(){
 }
 
 function enableCommentsSection(child){
-	var commentsSection = document.getElementsByClassName("commentsBox")[child-1];
+	var length = document.getElementsByClassName("commentsBox").length;
+	var commentsSection = document.getElementsByClassName("commentsBox")[length-child];
 	commentsSection.style.display = "block";
 }

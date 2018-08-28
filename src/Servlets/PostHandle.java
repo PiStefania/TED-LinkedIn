@@ -23,6 +23,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 
 import JavaFiles.AESCrypt;
+import JavaFiles.VariousFunctions;
 import database.dao.comment.CommentDAO;
 import database.dao.comment.CommentDAOImpl;
 import database.dao.post.PostDAO;
@@ -68,9 +69,15 @@ public class PostHandle extends HttpServlet {
 				for(Post post: userPosts) {
 					//set comments
 					List<Comment> comments = commentsDao.findComments((long)post.getId());
-					//set Date interval in specific format for comments
+					//set Date interval in specific format for comments and specific user
+					for(Comment comment: comments) {
+						comment.setDateInterval(VariousFunctions.getDateInterval(comment.getDatePosted()));
+					}
 					post.setComments(comments);
+					//set no of comments
+					post.setNoComments(comments.size());
 					//set Date interval in specific format
+					post.setDateInterval(VariousFunctions.getDateInterval(post.getDatePosted()));
 					//decrypt path and set lists of images,videos,audios
 				}				 
 				//display page
@@ -96,10 +103,16 @@ public class PostHandle extends HttpServlet {
 					//set comments
 					List<Comment> comments = commentsDao.findComments((long)post.getId());
 					//set Date interval in specific format for comments
+					for(Comment comment: comments) {
+						comment.setDateInterval(VariousFunctions.getDateInterval(comment.getDatePosted()));
+					}
 					post.setComments(comments);
+					//set no of comments
+					post.setNoComments(comments.size());
 					//set Date interval in specific format
+					post.setDateInterval(VariousFunctions.getDateInterval(post.getDatePosted()));
 					//decrypt path and set lists of images,videos,audios
-				}				
+				}					
 				//display page
 				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
 				displayPage.forward(request, response);
