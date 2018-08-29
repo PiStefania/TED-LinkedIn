@@ -176,6 +176,36 @@ public class Post implements Serializable {
 	}
 	
 	
+	@Transient
+	private List<String> listImages;
+	@Transient
+	private List<String> listVideos;
+	@Transient
+	private List<String> listAudios;
+
+	public List<String> getListImages() {
+		return listImages;
+	}
+
+	public void setListImages(List<String> listImages) {
+		this.listImages = listImages;
+	}
+
+	public List<String> getListVideos() {
+		return listVideos;
+	}
+
+	public void setListVideos(List<String> listVideos) {
+		this.listVideos = listVideos;
+	}
+
+	public List<String> getListAudios() {
+		return listAudios;
+	}
+
+	public void setListAudios(List<String> listAudios) {
+		this.listAudios = listAudios;
+	}
 	
 	
 	

@@ -79,7 +79,11 @@ public class PostHandle extends HttpServlet {
 					//set Date interval in specific format
 					post.setDateInterval(VariousFunctions.getDateInterval(post.getDatePosted()));
 					//decrypt path and set lists of images,videos,audios
-				}				 
+					if(post.getPathFiles() != null) {
+						String folderPath = AESCrypt.decrypt(post.getPathFiles());
+						VariousFunctions.setFilePathsFromFolders(folderPath,post);
+					}
+				}					 
 				//display page
 				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
 				displayPage.forward(request, response);
@@ -102,7 +106,7 @@ public class PostHandle extends HttpServlet {
 				for(Post post: userPosts) {
 					//set comments
 					List<Comment> comments = commentsDao.findComments((long)post.getId());
-					//set Date interval in specific format for comments
+					//set Date interval in specific format for comments and specific user
 					for(Comment comment: comments) {
 						comment.setDateInterval(VariousFunctions.getDateInterval(comment.getDatePosted()));
 					}
@@ -112,7 +116,11 @@ public class PostHandle extends HttpServlet {
 					//set Date interval in specific format
 					post.setDateInterval(VariousFunctions.getDateInterval(post.getDatePosted()));
 					//decrypt path and set lists of images,videos,audios
-				}					
+					if(post.getPathFiles() != null) {
+						String folderPath = AESCrypt.decrypt(post.getPathFiles());
+						VariousFunctions.setFilePathsFromFolders(folderPath,post);
+					}
+				}							
 				//display page
 				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
 				displayPage.forward(request, response);
