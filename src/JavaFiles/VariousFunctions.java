@@ -16,6 +16,8 @@ public class VariousFunctions {
         return email.matches("[a-zA-Z0-9\\.]+@[a-zA-Z0-9\\-\\_\\.]+\\.[a-zA-Z0-9]+");
 	}
 
+
+
 	public boolean isBlank(String str) {
 		
 		System.out.println("in isBlank");

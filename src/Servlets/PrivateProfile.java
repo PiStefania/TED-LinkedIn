@@ -1,7 +1,6 @@
 package Servlets;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,16 +14,16 @@ import database.dao.user.UserDAOImpl;
 import database.entities.User;
 
 /**
- * Servlet implementation class Messaging
+ * Servlet implementation class PrivateProfile
  */
-@WebServlet("/Messaging")
-public class Messaging extends HttpServlet {
+@WebServlet("/PrivateProfile")
+public class PrivateProfile extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Messaging() {
+    public PrivateProfile() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,31 +33,22 @@ public class Messaging extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		System.out.println("in profile get");
 		
-		//show last conversation
-		
-		System.out.println("again in get");
-		
-		String displayPage="/jsp_files/Messaging.jsp";
+		String displayPage="/jsp_files/privateProfile.jsp";
 		request.setAttribute("redirect", "StopLoop");	
-		
 			
 		UserDAO dao = new UserDAOImpl(true);
-		int user_id=Integer.valueOf((String) request.getSession().getAttribute("id"));
-		List<User> ulist = dao.getConnections(user_id);
-		System.out.println("id is "+ user_id);
-		request.setAttribute("users", ulist);
 		
-		if(ulist==null || ulist.size()==0) {
-			request.setAttribute("getUsers", "noFriends");
-		}
-		else {
-			request.setAttribute("getUsers", "friends");
-		}
-        
-		 RequestDispatcher view = request.getRequestDispatcher(displayPage);
-	     view.forward(request, response);
 		
+		int user_id=Integer.valueOf((String) request.getParameter("id"));
+		User user=dao.getUserProfile(user_id);
+		
+		request.setAttribute("user", user);
+
+    
+		RequestDispatcher view = request.getRequestDispatcher(displayPage);
+	    view.forward(request, response);
 	}
 
 	/**

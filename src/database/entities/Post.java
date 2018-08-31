@@ -58,6 +58,7 @@ public class Post implements Serializable {
 		this.likes = likes;
 	}
 
+
 	public int getId() {
 		return this.id;
 	}
@@ -217,9 +218,5 @@ public class Post implements Serializable {
 	public void setListAudiosNames(List<String> listAudiosNames) {
 		this.listAudiosNames = listAudiosNames;
 	}
-	
-	
-	
-	
 
 }

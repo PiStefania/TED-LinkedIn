@@ -31,13 +31,23 @@ import database.entities.User;
 public class LoginUser extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
     public LoginUser() {
         super();
     }
 
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 	}
 
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		UserDAO dao = new UserDAOImpl(true);
 		String email = request.getParameter("email");
@@ -63,6 +73,7 @@ public class LoginUser extends HttpServlet {
 			HttpSession session = request.getSession();
 			//set values
 			session.setAttribute("id",String.valueOf(loggedInUser.getId()));
+			session.setAttribute("email",loggedInUser.getEmail());
 			session.setAttribute("name",loggedInUser.getName());
 			session.setAttribute("surname",loggedInUser.getSurname());
 			session.setAttribute("image",loggedInUser.getPhotoURL());
