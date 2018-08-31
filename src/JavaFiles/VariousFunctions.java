@@ -96,10 +96,13 @@ public class VariousFunctions {
 	            }
 	            if(folderEntry.getName().equals("audio") && post.getHasAudio()==1) {
 	            	List<String> audios = new ArrayList<String>();
+	            	List<String> audiosNames = new ArrayList<String>();
 	            	for (final File fileEntry : folderEntry.listFiles()) {
 	            		audios.add(fileEntry.getPath());
+	            		audiosNames.add(fileEntry.getName());
 	            	}
 	            	post.setListAudios(audios);
+	            	post.setListAudiosNames(audiosNames);
 	            }
 	        }
 	    }

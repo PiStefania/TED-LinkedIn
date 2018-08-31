@@ -207,6 +207,18 @@ public class Post implements Serializable {
 		this.listAudios = listAudios;
 	}
 	
+	@Transient
+	private List<String> listAudiosNames;
+
+	public List<String> getListAudiosNames() {
+		return listAudiosNames;
+	}
+
+	public void setListAudiosNames(List<String> listAudiosNames) {
+		this.listAudiosNames = listAudiosNames;
+	}
+	
+	
 	
 	
 

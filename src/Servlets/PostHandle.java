@@ -83,7 +83,7 @@ public class PostHandle extends HttpServlet {
 						String folderPath = AESCrypt.decrypt(post.getPathFiles());
 						VariousFunctions.setFilePathsFromFolders(folderPath,post);
 					}
-				}					 
+				}	
 				//display page
 				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
 				displayPage.forward(request, response);
@@ -120,7 +120,7 @@ public class PostHandle extends HttpServlet {
 						String folderPath = AESCrypt.decrypt(post.getPathFiles());
 						VariousFunctions.setFilePathsFromFolders(folderPath,post);
 					}
-				}							
+				}	
 				//display page
 				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
 				displayPage.forward(request, response);

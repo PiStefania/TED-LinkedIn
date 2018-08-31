@@ -107,7 +107,12 @@
 			    </audio>
 			    <ul id="playlist">
 			    	<c:forEach items="${post.listAudios}" var="audio" varStatus="stat"> 
-						<li class="ltrack"><a class="track" href="${audio}"></a></li>
+			    		<c:if test="${stat.first}">
+			    			<li class="active"><a class="track" href="${audio}">${post.listAudiosNames[stat.index]}</a></li>
+			    		</c:if>
+			    		<c:if test="${!stat.first}">
+			    			<li><a class="track" href="${audio}">${post.listAudiosNames[stat.index]}</a></li>
+			    		</c:if>
 					</c:forEach>
 			    </ul>
 			</c:if>
