@@ -19,7 +19,7 @@ public class CommentDAOImpl implements CommentDAO
 	private static final String SQL_LIST = "SELECT comment_id, text, date_posted, post_id, user_id  FROM Comment";
 	private static final String SQL_INSERT = "INSERT INTO Comment (date_posted, text, post_id, user_id) VALUES (?, ?, ?, ?)";
 	private static final String SQL_COUNT = "SELECT COUNT(*) FROM Comment";
-	private static final String SQL_FIND_COMMENTS = "SELECT comment_id, text, date_posted, post_id, user_id FROM Comment WHERE post_id = ? ORDER BY date_posted ASC";
+	private static final String SQL_FIND_COMMENTS = "SELECT comment_id, text, date_posted, post_id, user_id FROM Comment WHERE post_id = ? ORDER BY date_posted DESC";
 	
     
     private ConnectionFactory factory;

@@ -195,18 +195,26 @@ public class RegisterUser extends HttpServlet {
 			User newUser = new User(null, null, null, email, 0, isAdmin, name, password, photoURL, surname, telephone,hasImage,null);
 
 			
-			dao.create(newUser);
+			int creation = dao.create(newUser);
 			
-			//create new session
-			request.getSession(true);
-			HttpSession session = request.getSession();
-			//set values
-			session.setAttribute("id",String.valueOf(newUser.getId()));
-			session.setAttribute("name",newUser.getName());
-			session.setAttribute("surname",newUser.getSurname());
-			session.setAttribute("image",newUser.getPhotoURL());
-			//go to home
-			response.sendRedirect(request.getContextPath() + "/jsp_files/home.jsp");
+			if(creation==-1) {
+				out.println("<script type=\"text/javascript\">");
+				out.println("alert('Oops! Something went wrong.');");
+				out.println("window.history.back()");
+				out.println("</script>");
+				return;
+			}else {
+				//create new session
+				request.getSession(true);
+				HttpSession session = request.getSession();
+				//set values
+				session.setAttribute("id",String.valueOf(newUser.getId()));
+				session.setAttribute("name",newUser.getName());
+				session.setAttribute("surname",newUser.getSurname());
+				session.setAttribute("image",newUser.getPhotoURL());
+				//go to home
+				response.sendRedirect(request.getContextPath() + "/jsp_files/home.jsp");
+			}
 		}
 	}
 
