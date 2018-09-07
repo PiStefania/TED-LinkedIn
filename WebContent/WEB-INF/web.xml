@@ -144,14 +144,6 @@
     <servlet-name>ListUsers</servlet-name>
     <url-pattern>/ListUsers/</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <servlet-name>AdminPage</servlet-name>
-    <servlet-class>Servlets.AdminPage</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AdminPage</servlet-name>
-    <url-pattern>/AdminPage/</url-pattern>
-  </servlet-mapping>
   <context-param>
     <param-name>tempfile.dir</param-name>
     <param-value>tmpfiles</param-value>
@@ -160,6 +152,14 @@
     <param-name>LinkedIn.dir</param-name>
     <param-value>LinkedIn</param-value>
   </context-param>
+  <servlet>
+    <servlet-name>AdminPage</servlet-name>
+    <servlet-class>Servlets.AdminPage</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminPage</servlet-name>
+    <url-pattern>/AdminPage/</url-pattern>
+  </servlet-mapping>
   <context-param>
     <param-name>users.dir</param-name>
     <param-value>users</param-value>

@@ -2,6 +2,8 @@ package Servlets;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
@@ -14,7 +16,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -23,24 +24,18 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 
 import JavaFiles.AESCrypt;
-import JavaFiles.VariousFunctions;
-import database.dao.comment.CommentDAO;
-import database.dao.comment.CommentDAOImpl;
-import database.dao.connection.ConnectionDAO;
-import database.dao.connection.ConnectionDAOImpl;
 import database.dao.post.PostDAO;
 import database.dao.post.PostDAOImpl;
 import database.dao.user.UserDAO;
 import database.dao.user.UserDAOImpl;
-import database.entities.Comment;
 import database.entities.Post;
 import database.entities.User;
 
 /**
  * Servlet implementation class PostCreation
  */
-@WebServlet("/PostHandle")
-public class PostHandle extends HttpServlet {
+@WebServlet("/PostCreation")
+public class PostCreation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private ServletFileUpload uploader = null;
@@ -53,131 +48,15 @@ public class PostHandle extends HttpServlet {
         uploader.setHeaderEncoding("UTF-8");
     }
        
-    public PostHandle() {
+    public PostCreation() {
         super();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PostDAO dao = new PostDAOImpl(true);
-		if(request.getParameter("action")!=null) {
-			if(request.getParameter("action").equals("getPosts")) {
-				HttpSession session = request.getSession();
-				long userId = Long.valueOf((String) session.getAttribute("id"));
-				List<Post> userPosts = dao.findPosts(userId);
-				//get right posts
-				request.setAttribute("posts",userPosts);
-				request.setAttribute("redirectPosts", "StopLoopPosts");
-				//get & set comments & edit post
-				CommentDAO commentsDao = new CommentDAOImpl(true);
-				for(Post post: userPosts) {
-					//set comments
-					List<Comment> comments = commentsDao.findComments((long)post.getId());
-					//set Date interval in specific format for comments and specific user
-					for(Comment comment: comments) {
-						comment.setDateInterval(VariousFunctions.getDateInterval(comment.getDatePosted()));
-					}
-					post.setComments(comments);
-					//set no of comments
-					post.setNoComments(comments.size());
-					//set Date interval in specific format
-					post.setDateInterval(VariousFunctions.getDateInterval(post.getDatePosted()));
-					//decrypt path and set lists of images,videos,audios
-					if(post.getPathFiles() != null) {
-						String folderPath = AESCrypt.decrypt(post.getPathFiles());
-						VariousFunctions.setFilePathsFromFolders(folderPath,post);
-					}
-					//set likes
-					post.setLikes(dao.countLikes(Long.valueOf(post.getId())));
-					//get if liked from user
-					post.setLiked(dao.checkLiked(userId, Long.valueOf(post.getId())));
-				}	
-				//get no of connections
-				ConnectionDAO cnxDao = new ConnectionDAOImpl(true);
-				int noConnections = cnxDao.countConnections(userId);
-				request.setAttribute("noConnections", noConnections);
-				//display page
-				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
-				displayPage.forward(request, response);
-				return;
-			}else if(request.getParameter("action").equals("insertLike")) {
-				//insert like
-				dao.insertLike(Long.valueOf((String) request.getSession().getAttribute("id")),Long.valueOf(request.getParameter("post_id")));
-				//display page
-				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
-				displayPage.forward(request, response);
-				return;
-			}else if(request.getParameter("action").equals("deleteLike")) {
-				//delete like
-				dao.deleteLike(Long.valueOf((String) request.getSession().getAttribute("id")),Long.valueOf(request.getParameter("post_id")));
-				//display page
-				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
-				displayPage.forward(request, response);
-				return;
-			}
-		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		PostDAO dao = new PostDAOImpl(true);
-		if(request.getParameter("action")!=null) {
-			if(request.getParameter("action").equals("getPosts")) {
-				HttpSession session = request.getSession();
-				long userId = Long.valueOf((String) session.getAttribute("id"));
-				List<Post> userPosts = dao.findPosts(userId);
-				//get right posts
-				request.setAttribute("posts",userPosts);
-				request.setAttribute("redirectPosts", "StopLoopPosts");
-				//get & set comments & edit post
-				CommentDAO commentsDao = new CommentDAOImpl(true);
-				for(Post post: userPosts) {
-					//set comments
-					List<Comment> comments = commentsDao.findComments((long)post.getId());
-					//set Date interval in specific format for comments and specific user
-					for(Comment comment: comments) {
-						comment.setDateInterval(VariousFunctions.getDateInterval(comment.getDatePosted()));
-					}
-					post.setComments(comments);
-					//set no of comments
-					post.setNoComments(comments.size());
-					//set Date interval in specific format
-					post.setDateInterval(VariousFunctions.getDateInterval(post.getDatePosted()));
-					//decrypt path and set lists of images,videos,audios
-					if(post.getPathFiles() != null) {
-						String folderPath = AESCrypt.decrypt(post.getPathFiles());
-						VariousFunctions.setFilePathsFromFolders(folderPath,post);
-					}
-					//set likes
-					post.setLikes(dao.countLikes(Long.valueOf(post.getId())));
-					//get if liked from user
-					post.setLiked(dao.checkLiked(userId, Long.valueOf(post.getId())));
-				}	
-				//get no of connections
-				ConnectionDAO cnxDao = new ConnectionDAOImpl(true);
-				int noConnections = cnxDao.countConnections(userId);
-				request.setAttribute("noConnections", noConnections);
-				//display page
-				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
-				displayPage.forward(request, response);
-				return;
-			}else if(request.getParameter("action").equals("insertLike")) {
-				//insert like
-				dao.insertLike(Long.valueOf((String) request.getSession().getAttribute("id")),Long.valueOf(request.getParameter("post_id")));
-				//display page
-				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
-				displayPage.forward(request, response);
-				return;
-			}else if(request.getParameter("action").equals("deleteLike")) {
-				//delete like
-				dao.deleteLike(Long.valueOf((String) request.getSession().getAttribute("id")),Long.valueOf(request.getParameter("post_id")));
-				//display page
-				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
-				displayPage.forward(request, response);
-				return;
-			}
-		}
-		//display page
-		RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
-		
 		ArrayList<FileItem> files = new ArrayList<FileItem>();
 		
 		Hashtable<String, String> fields = new Hashtable<String, String>();
@@ -259,9 +138,12 @@ public class PostHandle extends HttpServlet {
 		
 		//empty post
 		if((text==null || text.equals("")) && hasImages==0 && hasVideo==0 && hasAudio==0) {
-			request.setAttribute("postError", "Nothing to post.");
-			displayPage.forward(request, response);
-			return;
+			response.setContentType("text/html;charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script type=\"text/javascript\">");
+			out.println("alert('Nothing to post.');");
+			out.println("window.history.back()");
+			out.println("</script>");
 		}else {
 			//get and save files
 			for(FileItem file : files) {
@@ -305,9 +187,11 @@ public class PostHandle extends HttpServlet {
 			
 			Post newPost = new Post(text,dNow,pathFiles,hasAudio, hasImages, hasVideo, 0, user);
 			dao.create(newPost);
-		
+			
+			//update user's posts
+			//user.addPost(newPost);
 			//go home
-			displayPage.forward(request, response);
+			response.sendRedirect(request.getContextPath() + "/jsp_files/home.jsp");
 		}
 	}
 
