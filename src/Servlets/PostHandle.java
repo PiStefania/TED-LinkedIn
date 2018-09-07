@@ -56,11 +56,12 @@ public class PostHandle extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PostDAO dao = new PostDAOImpl(true);
 		if(request.getParameter("action")!=null) {
 			if(request.getParameter("action").equals("getPosts")) {
-				PostDAO dao = new PostDAOImpl(true);
 				HttpSession session = request.getSession();
-				List<Post> userPosts = dao.findPosts(Long.valueOf((String) session.getAttribute("id")));
+				long userId = Long.valueOf((String) session.getAttribute("id"));
+				List<Post> userPosts = dao.findPosts(userId);
 				//get right posts
 				request.setAttribute("posts",userPosts);
 				request.setAttribute("redirectPosts", "StopLoopPosts");
@@ -83,7 +84,29 @@ public class PostHandle extends HttpServlet {
 						String folderPath = AESCrypt.decrypt(post.getPathFiles());
 						VariousFunctions.setFilePathsFromFolders(folderPath,post);
 					}
+					//set likes
+					post.setLikes(dao.countLikes(Long.valueOf(post.getId())));
+					//get if liked from user
+					post.setLiked(dao.checkLiked(userId, Long.valueOf(post.getId())));
 				}	
+				//get no of connections
+				UserDAO userDao = new UserDAOImpl(true);
+				int noConnections = userDao.countConnections(userId);
+				request.setAttribute("noConnections", noConnections);
+				//display page
+				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
+				displayPage.forward(request, response);
+				return;
+			}else if(request.getParameter("action").equals("insertLike")) {
+				//insert like
+				dao.insertLike(Long.valueOf((String) request.getSession().getAttribute("id")),Long.valueOf(request.getParameter("post_id")));
+				//display page
+				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
+				displayPage.forward(request, response);
+				return;
+			}else if(request.getParameter("action").equals("deleteLike")) {
+				//delete like
+				dao.deleteLike(Long.valueOf((String) request.getSession().getAttribute("id")),Long.valueOf(request.getParameter("post_id")));
 				//display page
 				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
 				displayPage.forward(request, response);
@@ -97,7 +120,8 @@ public class PostHandle extends HttpServlet {
 		if(request.getParameter("action")!=null) {
 			if(request.getParameter("action").equals("getPosts")) {
 				HttpSession session = request.getSession();
-				List<Post> userPosts = dao.findPosts(Long.valueOf((String) session.getAttribute("id")));
+				long userId = Long.valueOf((String) session.getAttribute("id"));
+				List<Post> userPosts = dao.findPosts(userId);
 				//get right posts
 				request.setAttribute("posts",userPosts);
 				request.setAttribute("redirectPosts", "StopLoopPosts");
@@ -120,14 +144,29 @@ public class PostHandle extends HttpServlet {
 						String folderPath = AESCrypt.decrypt(post.getPathFiles());
 						VariousFunctions.setFilePathsFromFolders(folderPath,post);
 					}
+					//set likes
+					post.setLikes(dao.countLikes(Long.valueOf(post.getId())));
+					//get if liked from user
+					post.setLiked(dao.checkLiked(userId, Long.valueOf(post.getId())));
 				}	
+				//get no of connections
+				UserDAO userDao = new UserDAOImpl(true);
+				int noConnections = userDao.countConnections(userId);
+				request.setAttribute("noConnections", noConnections);
 				//display page
 				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
 				displayPage.forward(request, response);
 				return;
-			}else if(request.getParameter("action").equals("increaseLikes")) {
-				//update likes
-				dao.increaseLikes(Long.valueOf(request.getParameter("post_id")));
+			}else if(request.getParameter("action").equals("insertLike")) {
+				//insert like
+				dao.insertLike(Long.valueOf((String) request.getSession().getAttribute("id")),Long.valueOf(request.getParameter("post_id")));
+				//display page
+				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
+				displayPage.forward(request, response);
+				return;
+			}else if(request.getParameter("action").equals("deleteLike")) {
+				//delete like
+				dao.deleteLike(Long.valueOf((String) request.getSession().getAttribute("id")),Long.valueOf(request.getParameter("post_id")));
 				//display page
 				RequestDispatcher displayPage = getServletContext().getRequestDispatcher("/jsp_files/home.jsp");
 				displayPage.forward(request, response);

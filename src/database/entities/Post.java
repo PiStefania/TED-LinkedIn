@@ -43,8 +43,9 @@ public class Post implements Serializable {
 	@ManyToOne
 	private User user;
 
-	public Post() {
-	}
+	//bi-directional many-to-many association to User
+	@ManyToMany(mappedBy="posts2")
+	private List<User> users;
 	
 	public Post(String text, Date datePosted, String pathFiles, byte hasAudio, byte hasImages, byte hasVideos, int likes, User user) {
 		super();
@@ -58,6 +59,8 @@ public class Post implements Serializable {
 		this.likes = likes;
 	}
 
+	public Post() {
+	}
 
 	public int getId() {
 		return this.id;
@@ -152,7 +155,15 @@ public class Post implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
+	public List<User> getUsers() {
+		return this.users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+
 	//local fields for populate
 	@Transient
 	private int noComments;
@@ -217,6 +228,17 @@ public class Post implements Serializable {
 
 	public void setListAudiosNames(List<String> listAudiosNames) {
 		this.listAudiosNames = listAudiosNames;
+	}	
+	
+	@Transient
+	private int liked;
+
+	public int getLiked() {
+		return liked;
 	}
 
+	public void setLiked(int liked) {
+		this.liked = liked;
+	}
+	
 }
