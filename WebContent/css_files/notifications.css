@@ -12,12 +12,6 @@
     	
 }
 
-.profileImage{
-	height:80px;
-	width: 80px;
-	border-radius: 50%;
-	border: 1px solid #DCDCDC;
-}
 
 .friendRequests {
 	height:40vh;
@@ -34,8 +28,19 @@
 	 border: 1px solid 	#B6AFAF;
 }
 
-.row{
-	height:200px;
-	border: 1px solid black;
+
+
+.requestTable{
+	height:100%;
+	width:100%;
+	margin: 0px auto;
+    float: none;
+    border: 1px solid #cecece;
+    
+    
 }
 
+.notificationInfo{	
+	color: 	#585858;
+	font-size: 16px;
+}
