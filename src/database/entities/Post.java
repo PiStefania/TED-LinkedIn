@@ -53,7 +53,7 @@ public class Post implements Serializable {
 
 	public Post() {
 	}
-
+	
 	public Post(String text, Date datePosted, String pathFiles, byte hasAudio, byte hasImages, byte hasVideos, int likes, User user) {
 		super();
 		this.text = text;
@@ -65,7 +65,7 @@ public class Post implements Serializable {
 		this.user = user;
 		this.likes = likes;
 	}
-	
+
 	public int getId() {
 		return this.id;
 	}
@@ -201,7 +201,7 @@ public class Post implements Serializable {
 	public void setNoComments(int noComments) {
 		this.noComments = noComments;
 	}
-	
+
 	@Transient
 	private String dateInterval;
 
@@ -212,8 +212,8 @@ public class Post implements Serializable {
 	public void setDateInterval(String dateInterval) {
 		this.dateInterval = dateInterval;
 	}
-	
-	
+
+
 	@Transient
 	private List<String> listImages;
 	@Transient
@@ -244,7 +244,7 @@ public class Post implements Serializable {
 	public void setListAudios(List<String> listAudios) {
 		this.listAudios = listAudios;
 	}
-	
+
 	@Transient
 	private List<String> listAudiosNames;
 
@@ -255,7 +255,7 @@ public class Post implements Serializable {
 	public void setListAudiosNames(List<String> listAudiosNames) {
 		this.listAudiosNames = listAudiosNames;
 	}	
-	
+
 	@Transient
 	private int liked;
 

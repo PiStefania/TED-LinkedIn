@@ -98,6 +98,10 @@ public class User implements Serializable {
 	@OneToMany(mappedBy="user")
 	private List<Job> jobs;
 
+	//bi-directional many-to-one association to Jobapplication
+	@OneToMany(mappedBy="user")
+	private List<Jobapplication> jobapplications;
+
 	//bi-directional many-to-one association to Like
 	@OneToMany(mappedBy="user")
 	private List<Like> likes;
@@ -155,7 +159,7 @@ public class User implements Serializable {
 
 	public User() {
 	}
-	
+
 	public User(String city, String country, Date dateOfBirth, String email, int gender, byte isAdmin,
 			String name, String password, String photoURL, String surname, String tel, byte hasImage, List<Post> posts, String profExp, String skills, String education, String workPos, String institution,
 			byte privateCity, byte privateCountry, byte privateDateOfBirth, byte privateEducation, byte privateEmail, byte privateGender, byte privateSkills, byte privateProfExp, byte privateTelephone, byte privateWorkPos, byte privateInstitution) {
@@ -190,7 +194,7 @@ public class User implements Serializable {
 		this.privateInstitution = privateInstitution;
 		this.posts1 = posts;
 	}
-
+	
 	public int getId() {
 		return this.id;
 	}
@@ -535,6 +539,28 @@ public class User implements Serializable {
 		return job;
 	}
 
+	public List<Jobapplication> getJobapplications() {
+		return this.jobapplications;
+	}
+
+	public void setJobapplications(List<Jobapplication> jobapplications) {
+		this.jobapplications = jobapplications;
+	}
+
+	public Jobapplication addJobapplication(Jobapplication jobapplication) {
+		getJobapplications().add(jobapplication);
+		jobapplication.setUser(this);
+
+		return jobapplication;
+	}
+
+	public Jobapplication removeJobapplication(Jobapplication jobapplication) {
+		getJobapplications().remove(jobapplication);
+		jobapplication.setUser(null);
+
+		return jobapplication;
+	}
+
 	public List<Like> getLikes() {
 		return this.likes;
 	}
@@ -619,7 +645,6 @@ public class User implements Serializable {
 		this.users4 = users4;
 	}
 	
-	//add local variables
 	@Transient
 	private int postId;
 
@@ -630,7 +655,7 @@ public class User implements Serializable {
 	public void setPostId(int postId) {
 		this.postId = postId;
 	}
-	
+
 	@Transient
 	private int isComment;
 
@@ -641,7 +666,5 @@ public class User implements Serializable {
 	public void setIsComment(int isComment) {
 		this.isComment = isComment;
 	}
-
-
 
 }
